@@ -2,6 +2,7 @@ import { useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import JSConfetti from "js-confetti";
+import Fuse from 'fuse.js'
 
 function ProductAddition() {
   // Initial state for products, categories, and markets
@@ -95,7 +96,7 @@ function ProductAddition() {
     ]);
 
   //Implement Fuzzy Search
-  const fuzzySearch = (productName, searchText) => {
+  const Fuse = (productName, searchText) => {
     return productName.toLowerCase().includes(searchText.toLowerCase());
   };
 
