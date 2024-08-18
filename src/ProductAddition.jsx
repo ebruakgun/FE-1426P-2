@@ -58,10 +58,46 @@ function ProductAddition() {
 
   //Handle Filtering State
 
-  const [filteredMarketId, setFilteredShopId] = useState("");
+  const [filteredShopId, setFilteredShopId] = useState("");
   const [filteredCategoryId, setFilteredCategoryId] = useState("");
-  const [filteredStatus, setFilteredStatus] = useState("");
+  const [filteredStatus, setFilteredStatus] = useState("all");
   const [filteredName, setFilteredName] = useState("");
+
+  //Use the filteredProducts constant to filter the products based on the applied filters.
+  const filteredProducts =
+    (() => {
+      return products.filter((product) => {
+        const matchShop = filteredShopId
+          ? product.shopId === filteredShopId
+          : true;
+        const matchCategory = filteredCategoryId
+          ? product.categoryId === filteredCategoryId
+          : true;
+        const matchStatus =
+          filteredStatus === "all"
+            ? true
+            : filteredStatus === "bought"
+            ? product.isBought
+            : !product.isBought;
+        const matchName = filteredName
+          ? fuzzySearch(product.name, filteredName)
+          : true;
+
+        return matchShop && matchCategory && matchStatus && matchName;
+      });
+    },
+    [
+      filteredShopId,
+      filteredCategoryId,
+      filteredStatus,
+      filteredName,
+      products,
+    ]);
+
+  //Implement Fuzzy Search
+  const fuzzySearch = (productName, searchText) => {
+    return productName.toLowerCase().includes(searchText.toLowerCase());
+  };
 
   // Confetti
   const jsConfetti = new JSConfetti();
@@ -107,18 +143,62 @@ function ProductAddition() {
     <div>
       <div>
         <h2>Filtered Products</h2>
-        <div>
-          <label>Filtered Market:</label>
+        <div className="filter-box">
           <select
-            value={selectedMarket}
-            onChange={(e) => setSelectedMarket(e.target.value)}
+            onChange={(e) => setFilteredShopId(e.target.value)}
+            value={filteredShopId}
           >
             <option value="">Select Market</option>
-            {products.map((productName) => (
-              <option key={products.id} value={productName}>
-              </option>
-            ))}
+            {/* Populate options dynamically */}
           </select>
+
+          <select
+            onChange={(e) => setFilteredCategoryId(e.target.value)}
+            value={filteredCategoryId}
+          >
+            <option value="">Select Category</option>
+            {/* Populate options dynamically */}
+          </select>
+          <div>
+          <p>Buying Status:</p>
+            <label>
+              <input
+                type="radio"
+                name="status"
+                value="bought"
+                checked={filteredStatus === "bought"}
+                onChange={() => setFilteredStatus("bought")}
+              />
+              Bought
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="status"
+                value="notBought"
+                checked={filteredStatus === "notBought"}
+                onChange={() => setFilteredStatus("notBought")}
+              />
+              Not Bought
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="status"
+                value="all"
+                checked={filteredStatus === "all"}
+                onChange={() => setFilteredStatus("all")}
+              />
+              All
+            </label>
+          </div>
+          <p>Product Name Text Input:</p>
+          <input
+            type="text"
+            placeholder="Product name"
+            value={filteredName}
+            onChange={(e) => setFilteredName(e.target.value)}
+          />
         </div>
       </div>
 
