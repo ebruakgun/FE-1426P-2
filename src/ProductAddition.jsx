@@ -63,7 +63,6 @@ function ProductAddition() {
   const [filteredStatus, setFilteredStatus] = useState("");
   const [filteredName, setFilteredName] = useState("");
 
-
   // Confetti
   const jsConfetti = new JSConfetti();
 
@@ -107,27 +106,25 @@ function ProductAddition() {
   return (
     <div>
       <div>
-      <h2>Filtered Products</h2>
-      <div>
+        <h2>Filtered Products</h2>
+        <div>
           <label>Filtered Market:</label>
           <select
             value={selectedMarket}
-            onChange={(e) => setSelectedMarket(e.target.value)}>
+            onChange={(e) => setSelectedMarket(e.target.value)}
+          >
             <option value="">Select Market</option>
-            {markets.map((market) => (
-              <option key={market.id} value={market.id}>
-                {market.name}
+            {products.map((productName) => (
+              <option key={products.id} value={productName}>
               </option>
             ))}
           </select>
         </div>
-
       </div>
 
-
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
 
       <h2>Add New Product</h2>
       <form onSubmit={handleSubmit}>
@@ -145,7 +142,8 @@ function ProductAddition() {
           <label>Market:</label>
           <select
             value={selectedMarket}
-            onChange={(e) => setSelectedMarket(e.target.value)}>
+            onChange={(e) => setSelectedMarket(e.target.value)}
+          >
             <option value="">Select Market</option>
             {markets.map((market) => (
               <option key={market.id} value={market.id}>
